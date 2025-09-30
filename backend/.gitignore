@@ -1,0 +1,9 @@
+# Node
+frontend/node_modules
+frontend/dist
+# Python
+backend/venv
+backend/__pycache__
+*.pyc
+# VS Code
+.vscode/
