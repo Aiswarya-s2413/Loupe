@@ -4,6 +4,9 @@ frontend/dist
 # Python
 backend/venv
 backend/__pycache__
+backend/.env
+# Django
+backend/db.sqlite3
 *.pyc
 # VS Code
 .vscode/
