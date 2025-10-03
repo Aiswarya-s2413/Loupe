@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from backend import models, schemas, crud
 from backend.database import engine, get_db
 import os
+from backend.fact_check import router as fact_router
+
 
 # Create DB tables 
 models.Base.metadata.create_all(bind=engine)
@@ -23,6 +25,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(fact_router)
 
 @app.post("/pages/", response_model=schemas.PageRead)
 def create_page_endpoint(page: schemas.PageCreate, db: Session = Depends(get_db)):
