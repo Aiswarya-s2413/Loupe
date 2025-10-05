@@ -109,7 +109,7 @@ const BasicEditor: React.FC = () => {
     fetch('http://localhost:8000/pages/')
       .then(res => res.json())
       .then(data => setPages(data))
-      .catch(err => console.error('Failed to load pages:', err));
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -168,16 +168,13 @@ const BasicEditor: React.FC = () => {
 
       const data = await response.json();
       if (!isUpdate) {
-        console.log('Saved as new page:', data.id);
         setPageId(data.id);
         setToast({ message: 'Saved successfully!', type: 'success' });
       } else {
-        console.log('Updated page:', data.id);
         setToast({ message: 'Page saved successfully!', type: 'success' });
       }
       fetchPages();
     } catch (error) {
-      console.error('Save failed:', error);
       setToast({ message: 'Failed to save page. Please try again.', type: 'error' });
     } finally {
       setIsSaving(false);
@@ -331,8 +328,7 @@ const BasicEditor: React.FC = () => {
       setShareUrl(data.share_url);
       setShowShareModal(true);
     } catch (error) {
-      console.error('Share failed:', error);
-      alert('Failed to generate share link. Please save the page first.');
+      setToast({ message: 'Failed to generate share link. Please save the page first.', type: 'error' });
     } finally {
       setIsSharing(false);
     }
@@ -341,7 +337,7 @@ const BasicEditor: React.FC = () => {
   const copyShareLink = () => {
     if (shareUrl) {
       navigator.clipboard.writeText(shareUrl);
-      alert('Share link copied to clipboard!');
+      setToast({ message: 'Share link copied to clipboard!', type: 'success' });
     }
   };
 
@@ -350,7 +346,10 @@ const BasicEditor: React.FC = () => {
     const selection = window.getSelection();
     const selectedText = selection ? selection.toString().trim() : '';
 
-    if (!selectedText) return alert('Select some text first!');
+    if (!selectedText) {
+      setToast({ message: 'Select some text first!', type: 'info' });
+      return;
+    }
 
     setIsAsking(true);
 
@@ -370,11 +369,8 @@ const BasicEditor: React.FC = () => {
         { id: Date.now(), text: selectedText, response: data.explanation || 'No response' }
       ]);
 
-      console.log('AI Response:', data.explanation);
-
     } catch (err) {
-      console.error(err);
-      alert('AI request failed');
+      setToast({ message: 'AI request failed', type: 'error' });
     } finally {
       setIsAsking(false);
     }
@@ -407,8 +403,7 @@ const BasicEditor: React.FC = () => {
       setShowDeleteModal(false);
       setPageToDelete(null);
     } catch (error) {
-      console.error('Delete failed:', error);
-      alert('Failed to delete page');
+      setToast({ message: 'Failed to delete page', type: 'error' });
     }
   };
 
