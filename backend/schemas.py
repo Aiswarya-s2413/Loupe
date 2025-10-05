@@ -12,6 +12,12 @@ class PageCreate(PageBase):
 class PageRead(PageBase):
     id: int
     created_at: datetime
+    share_token: Optional[str] = None
+    is_public: bool = False
 
     class Config:
         orm_mode = True
+
+class ShareResponse(BaseModel):
+    share_url: str
+    share_token: str

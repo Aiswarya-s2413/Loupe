@@ -34,17 +34,11 @@ export default function SelectionToolbar({ onAsk }: Props) {
   return (
     <div style={style}>
       <button
-        onMouseDown={(e) => { e.preventDefault(); onAsk(); }}
-        style={{
-          padding: "6px 10px",
-          borderRadius: 6,
-          border: "1px solid #ccc",
-          background: "#111",
-          color: "#fff",
-          cursor: "pointer",
-        }}
+        onMouseDown={(event) => { event.preventDefault(); onAsk(); setVisible(false); }}
+        className="selection-toolbar__button"
+        type="button"
       >
-        Ask AI
+        🤖 ASK AI
       </button>
     </div>
   );
