@@ -1,6 +1,3 @@
-"""
-Database migration script to add share_token and is_public columns
-"""
 import sys
 import os
 import logging
@@ -11,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from backend.database import engine
+from database import engine
 from sqlalchemy import text
 
 def migrate():

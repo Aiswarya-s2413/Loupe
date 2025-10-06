@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, func
 from sqlalchemy.dialects.postgresql import JSONB
-from backend.database import Base
+from database import Base
 
 class Page(Base):
     __tablename__ = "pages"

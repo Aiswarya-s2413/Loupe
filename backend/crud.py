@@ -1,21 +1,22 @@
 from sqlalchemy.orm import Session
-from backend import models, schemas
+from models import Page
+from schemas import PageCreate
 import secrets
 
-def create_page(db: Session, page: schemas.PageCreate):
-    db_page = models.Page(title=page.title, content=page.content)
+def create_page(db: Session, page: PageCreate):
+    db_page = Page(title=page.title, content=page.content)
     db.add(db_page)
     db.commit()
     db.refresh(db_page)
     return db_page
 
 def get_page(db: Session, page_id: int):
-    return db.query(models.Page).filter(models.Page.id == page_id).first()
+    return db.query(Page).filter(Page.id == page_id).first()
 
 def get_page_by_token(db: Session, share_token: str):
-    return db.query(models.Page).filter(
-        models.Page.share_token == share_token,
-        models.Page.is_public == True
+    return db.query(Page).filter(
+        Page.share_token == share_token,
+        Page.is_public == True
     ).first()
 
 def generate_share_token(db: Session, page_id: int):
@@ -28,7 +29,7 @@ def generate_share_token(db: Session, page_id: int):
     token = secrets.token_urlsafe(16)
     
     # Ensure uniqueness
-    while db.query(models.Page).filter(models.Page.share_token == token).first():
+    while db.query(Page).filter(Page.share_token == token).first():
         token = secrets.token_urlsafe(16)
     
     page.share_token = token
@@ -48,7 +49,7 @@ def revoke_share_token(db: Session, page_id: int):
     db.refresh(page)
     return page
 
-def update_page(db: Session, page_id: int, page_update: schemas.PageCreate):
+def update_page(db: Session, page_id: int, page_update: PageCreate):
     db_page = get_page(db, page_id)
     if not db_page:
         return None
@@ -59,7 +60,7 @@ def update_page(db: Session, page_id: int, page_update: schemas.PageCreate):
     return db_page
 
 def list_pages(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Page).offset(skip).limit(limit).all()
+    return db.query(Page).offset(skip).limit(limit).all()
 
 def delete_page(db: Session, page_id: int):
     db_page = get_page(db, page_id)
